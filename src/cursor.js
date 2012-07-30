@@ -284,7 +284,7 @@ _.insertCh = function(ch) {
   var cmd;
   if (ch.match(/^[a-eg-zA-Z]$/)) //exclude f because want florin
     cmd = new Variable(ch);
-  else if (cmd = CharCmds[ch] || LatexCmds[ch] &&
+  else if ((cmd = CharCmds[ch] || LatexCmds[ch]) &&
       !(ch.match(/[:;,]/))) // exclude spaces symbols here, they are backslash-sequences (this is also a hack)
     cmd = new cmd(this.selection, ch);
   else
