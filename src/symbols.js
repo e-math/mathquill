@@ -301,9 +301,42 @@ LatexCmds.complexplane = LatexCmds.Complexplane = LatexCmds.ComplexPlane =
 LatexCmds.H = LatexCmds.Hamiltonian = LatexCmds.quaternions = LatexCmds.Quaternions =
   bind(VanillaSymbol,'\\mathbb{H}','&#8461;');
 
+// pesasa added some working alternatives for sets of numbers as long as \\mathbb{} is broken.
+LatexCmds.NN = bind(VanillaSymbol, '\\NN','&#8469;');
+LatexCmds.PP = bind(VanillaSymbol, '\\PP','&#8473;');
+LatexCmds.ZZ = bind(VanillaSymbol, '\\ZZ','&#8484;');
+LatexCmds.QQ = bind(VanillaSymbol, '\\QQ','&#8474;');
+LatexCmds.RR = bind(VanillaSymbol, '\\RR','&#8477;');
+LatexCmds.CC = bind(VanillaSymbol, '\\CC','&#8450;');
+LatexCmds.HH = bind(VanillaSymbol, '\\HH','&#8461;');
+LatexCmds.AA = bind(VanillaSymbol, '\\AA','&#120120;');
+LatexCmds.BB = bind(VanillaSymbol, '\\BB','&#120121;');
+LatexCmds.DD = bind(VanillaSymbol, '\\DD','&#120123;');
+LatexCmds.EE = bind(VanillaSymbol, '\\EE','&#120124;');
+LatexCmds.FF = bind(VanillaSymbol, '\\FF','&#120125;');
+LatexCmds.GG = bind(VanillaSymbol, '\\GG','&#120126;');
+LatexCmds.II = bind(VanillaSymbol, '\\II','&#120128;');
+LatexCmds.JJ = bind(VanillaSymbol, '\\JJ','&#120129;');
+LatexCmds.KK = bind(VanillaSymbol, '\\KK','&#120130;');
+LatexCmds.LL = bind(VanillaSymbol, '\\LL','&#120131;');
+LatexCmds.MM = bind(VanillaSymbol, '\\MM','&#120132;');
+LatexCmds.OO = bind(VanillaSymbol, '\\OO','&#120134;');
+LatexCmds.SS = bind(VanillaSymbol, '\\SS','&#120138;');
+LatexCmds.TT = bind(VanillaSymbol, '\\TT','&#120139;');
+LatexCmds.UU = bind(VanillaSymbol, '\\UU','&#120140;');
+LatexCmds.VV = bind(VanillaSymbol, '\\VV','&#120141;');
+LatexCmds.XX = bind(VanillaSymbol, '\\XX','&#120142;');
+LatexCmds.YY = bind(VanillaSymbol, '\\YY','&#120143;');
+
 //spacing
 LatexCmds.quad = LatexCmds.emsp = bind(VanillaSymbol,'\\quad ','    ');
 LatexCmds.qquad = bind(VanillaSymbol,'\\qquad ','        ');
+LatexCmds[','] = bind(VanillaSymbol,'\\, ',' ');
+LatexCmds[':'] = bind(VanillaSymbol,'\\: ','  ');
+LatexCmds[';'] = bind(VanillaSymbol,'\\; ','   ');
+LatexCmds['%'] = bind(VanillaSymbol,'\\% ','<span style="margin-left:0.2em;margin-right:0.2em;">%</span>');
+LatexCmds['&'] = bind(VanillaSymbol,'\\& ','<span style="margin-left:0.2em;margin-right:0.2em;">&</span>');
+
 /* spacing special characters, gonna have to implement this in LatexCommandInput::textInput somehow
 case ',':
   return new VanillaSymbol('\\, ',' ');
@@ -353,6 +386,9 @@ LatexCmds.doteq = bind(VanillaSymbol, '\\doteq ', '&#8784;');
 LatexCmds.frown = bind(VanillaSymbol, '\\frown ', '&#8994;');
 LatexCmds.vdash = bind(VanillaSymbol, '\\vdash ', '&#8870;');
 LatexCmds.dashv = bind(VanillaSymbol, '\\dashv ', '&#8867;');
+LatexCmds.Vdash = bind(VanillaSymbol, '\\Vdash ', '&#8873;');
+LatexCmds.nmid = bind(VanillaSymbol, '\\nmid ', '&#8740;');
+LatexCmds.square = bind(VanillaSymbol, '\\square ', '&#9633;');
 
 //arrows
 LatexCmds.longleftarrow = bind(VanillaSymbol, '\\longleftarrow ', '&#8592;');
