@@ -240,6 +240,7 @@ _.redraw = function() {
   var block = this.lastChild.jQ;
   scale(block.prev(), 1, block.innerHeight()/+block.css('fontSize').slice(0,-2) - .1);
 };
+_.optional_arg_command = 'nthroot';
 
 LatexCmds.sqrt = LatexCmds['√'] = SquareRoot;
 
