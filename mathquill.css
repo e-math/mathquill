@@ -398,3 +398,8 @@
 /*.mathquill-rendered-math .not {
   margin-right: -.75em;
 }*/
+
+/**** Additions for E-math by Pesasa and Pekasa ****/
+.mathquill-editable.mathquill-rendered-math {white-space: pre-wrap;}
+.mathquill-editable.mathquill-rendered-math * {white-space: nowrap;}
+.mathquill-rendered-math .cases .array {text-align: left;}
