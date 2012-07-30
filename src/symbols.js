@@ -174,8 +174,8 @@ CharCmds['*'] = LatexCmds.sdot = LatexCmds.cdot =
 //semantically should be &sdot;, but &middot; looks better
 
 LatexCmds['='] = bind(BinaryOperator, '=', '=');
-LatexCmds['lt'] = bind(BinaryOperator, '\\lt', '&lt;');
-LatexCmds['gt'] = bind(BinaryOperator, '\\gt', '&gt;');
+LatexCmds['lt'] = bind(BinaryOperator, '\\lt ', '&lt;');
+LatexCmds['gt'] = bind(BinaryOperator, '\\gt ', '&gt;');
 
 LatexCmds.notin =
 LatexCmds.sim =
@@ -208,9 +208,9 @@ LatexCmds.prop = LatexCmds.propto = bind(BinaryOperator,'\\propto ','&prop;');
 
 LatexCmds['≈'] = LatexCmds.asymp = LatexCmds.approx = bind(BinaryOperator,'\\approx ','&asymp;');
 
-LatexCmds['<'] = bind(BinaryOperator,'\\lt','&lt;');
+LatexCmds['<'] = bind(BinaryOperator,'\\lt ','&lt;');
 
-LatexCmds['>'] = bind(BinaryOperator,'\\gt','&gt;');
+LatexCmds['>'] = bind(BinaryOperator,'\\gt ','&gt;');
 
 LatexCmds['≤'] = LatexCmds.le = LatexCmds.leq = bind(BinaryOperator,'\\le ','&le;');
 
@@ -493,27 +493,41 @@ LatexCmds.uArr = LatexCmds.Uparrow = bind(VanillaSymbol,'\\Uparrow ','&uArr;');
 
 LatexCmds.to = bind(BinaryOperator,'\\to ','&rarr;');
 
-LatexCmds.rarr = LatexCmds.rightarrow = bind(VanillaSymbol,'\\rightarrow ','&rarr;');
+//LatexCmds.rarr = LatexCmds.rightarrow = bind(VanillaSymbol,'\\rightarrow ','&rarr;');
+// By pesasa: change rightarrow to binary operator
+LatexCmds.rarr = LatexCmds.rightarrow = bind(BinaryOperator,'\\rightarrow ','&rarr;');
 
 LatexCmds.implies = bind(BinaryOperator,'\\Rightarrow ','&rArr;');
 
-LatexCmds.rArr = LatexCmds.Rightarrow = bind(VanillaSymbol,'\\Rightarrow ','&rArr;');
+//LatexCmds.rArr = LatexCmds.Rightarrow = bind(VanillaSymbol,'\\Rightarrow ','&rArr;');
+// By pesasa: change Rightarrow to binary operator
+LatexCmds.rArr = LatexCmds.Rightarrow = bind(BinaryOperator,'\\Rightarrow ','&rArr;');
 
 LatexCmds.gets = bind(BinaryOperator,'\\gets ','&larr;');
 
-LatexCmds.larr = LatexCmds.leftarrow = bind(VanillaSymbol,'\\leftarrow ','&larr;');
+//LatexCmds.larr = LatexCmds.leftarrow = bind(VanillaSymbol,'\\leftarrow ','&larr;');
+// By pesasa: change leftarrow to binary operator
+LatexCmds.larr = LatexCmds.leftarrow = bind(BinaryOperator,'\\leftarrow ','&larr;');
 
 LatexCmds.impliedby = bind(BinaryOperator,'\\Leftarrow ','&lArr;');
 
-LatexCmds.lArr = LatexCmds.Leftarrow = bind(VanillaSymbol,'\\Leftarrow ','&lArr;');
+//LatexCmds.lArr = LatexCmds.Leftarrow = bind(VanillaSymbol,'\\Leftarrow ','&lArr;');
+// By pesasa: change Leftarrow to binary operator
+LatexCmds.lArr = LatexCmds.Leftarrow = bind(BinaryOperator,'\\Leftarrow ','&lArr;');
 
+//LatexCmds.harr = LatexCmds.lrarr = LatexCmds.leftrightarrow =
+//  bind(VanillaSymbol,'\\leftrightarrow ','&harr;');
+// By pesasa: change leftrightarrow to binary operator
 LatexCmds.harr = LatexCmds.lrarr = LatexCmds.leftrightarrow =
-  bind(VanillaSymbol,'\\leftrightarrow ','&harr;');
+  bind(BinaryOperator,'\\leftrightarrow ','&harr;');
 
 LatexCmds.iff = bind(BinaryOperator,'\\Leftrightarrow ','&hArr;');
 
+//LatexCmds.hArr = LatexCmds.lrArr = LatexCmds.Leftrightarrow =
+//  bind(VanillaSymbol,'\\Leftrightarrow ','&hArr;');
+// By pesasa: change Leftrightarrow to binary operator
 LatexCmds.hArr = LatexCmds.lrArr = LatexCmds.Leftrightarrow =
-  bind(VanillaSymbol,'\\Leftrightarrow ','&hArr;');
+  bind(BinaryOperator,'\\Leftrightarrow ','&hArr;');
 
 LatexCmds.Re = LatexCmds.Real = LatexCmds.real = bind(VanillaSymbol,'\\Re ','&real;');
 
@@ -533,10 +547,15 @@ LatexCmds.xist = //LOL
 LatexCmds.xists = LatexCmds.exist = LatexCmds.exists =
   bind(VanillaSymbol,'\\exists ','&exist;');
 
+//LatexCmds.and = LatexCmds.land = LatexCmds.wedge =
+//  bind(VanillaSymbol,'\\wedge ','&and;');
+// By pesasa: change land to binary operator
 LatexCmds.and = LatexCmds.land = LatexCmds.wedge =
-  bind(VanillaSymbol,'\\wedge ','&and;');
+  bind(BinaryOperator,'\\wedge ','&and;');
 
-LatexCmds.or = LatexCmds.lor = LatexCmds.vee = bind(VanillaSymbol,'\\vee ','&or;');
+//LatexCmds.or = LatexCmds.lor = LatexCmds.vee = bind(VanillaSymbol,'\\vee ','&or;');
+// By pesasa: change lor to binary operator
+LatexCmds.or = LatexCmds.lor = LatexCmds.vee = bind(BinaryOperator,'\\vee ','&or;');
 
 LatexCmds.o = LatexCmds.O =
 LatexCmds.empty = LatexCmds.emptyset =
