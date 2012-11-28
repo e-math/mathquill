@@ -376,6 +376,8 @@ LatexCmds.mid = bind(VanillaSymbol, '\\mid ', '&#8739;');
 LatexCmds.ll = bind(VanillaSymbol, '\\ll ', '&#8810;');
 LatexCmds.gg = bind(VanillaSymbol, '\\gg ', '&#8811;');
 LatexCmds.parallel = bind(VanillaSymbol, '\\parallel ', '&#8741;');
+/*** pesasa added for e-math ****/
+LatexCmds.nparallel = bind(VanillaSymbol, '\\nparallel ', '&#8742;');
 LatexCmds.bowtie = bind(VanillaSymbol, '\\bowtie ', '&#8904;');
 LatexCmds.sqsubset = bind(VanillaSymbol, '\\sqsubset ', '&#8847;');
 LatexCmds.sqsupset = bind(VanillaSymbol, '\\sqsupset ', '&#8848;');
