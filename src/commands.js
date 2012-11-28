@@ -99,6 +99,14 @@ LatexCmds.extramot = bind(Style, '\\extramot', '<span class="extramotivation"></
 LatexCmds.underline = bind(Style, '\\underline', '<span class="underline"></span>');
 LatexCmds.overline = LatexCmds.bar = bind(Style, '\\overline', '<span class="overline"></span>');
 
+// Colors for E-math by pesasa
+LatexCmds.red = bind(Style, '\\red', '<span class="color_red"></span>');
+LatexCmds.blue = bind(Style, '\\blue', '<span class="color_blue"></span>');
+LatexCmds.green = bind(Style, '\\green', '<span class="color_green"></span>');
+LatexCmds.violet = bind(Style, '\\violet', '<span class="color_violet"></span>');
+LatexCmds.orange = bind(Style, '\\orange', '<span class="color_orange"></span>');
+
+
 function SupSub(cmd, html, text, replacedFragment) {
   this.init(cmd, [ html ], [ text ], replacedFragment);
 }
