@@ -111,6 +111,8 @@ function createRoot(jQ, root, textbox, editable) {
     jQ.mousemove(mousemove);
     $(document).mousemove(docmousemove).mouseup(mouseup);
 
+    // E-math: added by Pesasa to make sure we get focusout.
+    jQuery(document.activeElement).parents('.mathquill-editable').focusout().blur();
     return false;
   });
 
