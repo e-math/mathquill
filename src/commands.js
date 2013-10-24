@@ -638,6 +638,438 @@ _.text_template = ['case(',',',')'];
 _.redraw = Bracket.prototype.redraw;
 LatexCmds.cases = LatexCmds.cases = Cases;
 
+function Determ(replacedFragment, token, latex) {
+  if (latex && latex[0] === '[') {
+    latex.shift();
+    var cols = '';
+    var rows = '';
+    while (/^[0-9]$/.test(latex[0])){
+      cols += latex.shift();
+    }
+    cols = parseInt(cols);
+    if (latex[0] === ',') {
+      latex.shift();
+      while (/^[0-9]$/.test(latex[0])){
+        rows += latex.shift();
+      }
+      rows = parseInt(rows);
+    } else {
+      rows = cols;
+    }
+    if (latex[0] === ']') {
+      latex.shift();
+    }
+  }
+  this.colNum = cols || 1;
+  this.rowNum = rows || 1;
+  this.editlock = false;
+  this.init('\\determ', undefined, undefined, replacedFragment);
+  this.jQ.wrapInner('<span class="matrixbody"></span>');
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">|</span>').prependTo(this.jQ)
+      .add( $('<span class="paren">|</span>').appendTo(this.jQ));
+}
+_ = Determ.prototype = new MathCommand;
+_.html_template =
+  ['<span class="block determ"></span>'];
+_.text_template = ['determ(',',',',',',',')'];
+_.redraw = Bracket.prototype.redraw;
+_.initBlocks = function(replacedFragment){
+  var self = this;
+  
+  var newBlock, prev;
+  this.firstChild = newBlock = prev =
+    (replacedFragment && replacedFragment.blockify()) || new MathBlock;
+  var firstDone = false;
+  
+  for (var i = 0; i < this.rowNum; i++) {
+    this.jQ.append('<span class="matrixrow"></span>');
+    var mrow = this.jQ.find('.matrixrow:last');
+    for (var j = 0; j < this.colNum; j++) {
+      if (!firstDone) {
+        firstDone = true;
+        newBlock.jQ = $('<span class="matrixcell"></span>')
+          .data(jQueryDataKey, {block: newBlock})
+          .append(newBlock.jQ)
+          .appendTo(mrow);
+        this.lastChild = newBlock;
+        newBlock.blur();
+        newBlock.parent = self;
+      } else {
+        newBlock = new MathBlock;
+        newBlock.jQ = $('<span class="matrixcell"></span>')
+          .data(jQueryDataKey, {block: newBlock})
+          .append(newBlock.jQ)
+          .appendTo(mrow);
+        newBlock.prev = this.lastChild;
+        newBlock.prev.next = newBlock;
+        this.lastChild = newBlock;
+        newBlock.blur();
+        newBlock.parent = self;
+      }
+    }
+  }
+}
+_.placeCursor = function(cursor) {
+  this.cursor = cursor.appendTo(this.firstChild);
+};
+_.addRow = function() {
+  if (this.editlock) {
+    return false;
+  } else {
+    this.editlock = true;
+  }
+  var newrow = $('<span class="matrixrow"></span>');
+  var row = $('.matrixrow:last', this.jQ);
+  var newrow = $('<span class="matrixrow"></span>');
+  var cb;
+  
+  for (var i = 0; i < this.colNum; i++) {
+    var newBlock = new MathBlock;
+    cb = cb || newBlock;
+    newBlock.parent = this;
+    newBlock.jQ = $('<span class="matrixcell"></span>').data(jQueryDataKey, {block: newBlock}).appendTo(newrow);
+    newBlock.prev = this.lastChild;
+    this.lastChild.next = newBlock;
+    newBlock.next = null;
+    this.lastChild = newBlock;
+    this.cursor.appendTo(newBlock);
+  }
+  row.after(newrow);
+  this.cursor.appendTo(cb).redraw();
+  this.rowNum++;
+  this.editlock = false;
+  return false;
+}
+_.addCol = function(){
+  if (this.editlock) {
+    return false;
+  } else {
+    this.editlock = true;
+  }
+  var curr = this.firstChild;
+  var rows = $('.matrixrow', this.jQ);
+  var cb;
+  for (var i = 0; i < this.rowNum; i++) {
+    for (var j = 1; j < this.colNum; j++) {
+      curr = curr.next;
+    }
+    var newBlock = new MathBlock;
+    cb = cb || newBlock;
+    newBlock.parent = this;
+    newBlock.jQ = $('<span class="matrixcell"></span>').data(jQueryDataKey, {block: newBlock}).appendTo(rows.eq(i));
+    newBlock.prev = curr;
+    newBlock.next = curr.next;
+    curr.next = newBlock;
+    if (newBlock.next) {
+      newBlock.next.prev = newBlock;
+      curr = newBlock.next;
+    } else {
+      this.lastChild = newBlock;
+    }
+    this.cursor.appendTo(newBlock).redraw();
+    this.cursor.appendTo(cb).redraw();
+  }
+  this.colNum++;
+  this.editlock = false;
+  return false;
+}
+_.removeRow = function() {
+  if (this.rowNum === 1 || this.editlock) {
+    return false;
+  } else {
+    this.editlock = true;
+  }
+  var row = $('.matrixrow:last', this.jQ);
+  var curr = this.lastChild;
+  var prev = curr.prev;
+  for (var i = 0; i < this.colNum; i++) {
+    curr.next = null;
+    curr.prev = null;
+    curr.parent = null;
+    curr.jQ.remove();
+    curr = prev;
+    curr.next = null;
+    prev = curr.prev;
+  }
+  this.lastChild = curr;
+  row.remove();
+  this.rowNum--;
+  this.cursor.appendTo(curr).redraw();
+  this.editlock = false;
+  return false;
+}
+_.removeCol = function() {
+  if (this.colNum === 1 || this.editlock) {
+    return false;
+  } else {
+    this.editlock = true;
+  }
+  var curr = this.firstChild;
+  var prev;
+  for (var i = 0; i < this.rowNum; i++) {
+    for (var j = 1; j < this.colNum; j++){
+      prev = curr;
+      curr = curr.next;
+    }
+    prev.next = curr.next;
+    if (curr.next) {
+      curr.next.prev = prev;
+    }
+    curr.prev = null;
+    curr.next = null;
+    curr.parent = null;
+    curr.jQ.remove();
+    curr = prev.next;
+  }
+  curr = prev;
+  this.lastChild = curr;
+  this.cursor.appendTo(curr).redraw();
+  this.colNum--;
+  this.editlock = false;
+  return false;
+}
+_.keydown = function(e) {
+  var currentBlock = this.cursor.parent;
+  var self = this;
+  if (currentBlock.parent === this) {
+    if (e.which === 13) { //enter
+      var row = $('.matrixrow:last', this.jQ);
+      var colnum = row.find('.matrixcell').length;
+      var newrow = $('<span class="matrixrow"></span>');
+      var cb;
+      
+      for (var i = 0; i < colnum; i++) {
+        var newBlock = new MathBlock;
+        cb = cb || newBlock;
+        newBlock.parent = self;
+        newBlock.jQ = $('<span class="matrixcell"></span>').data(jQueryDataKey, {block: newBlock}).appendTo(newrow);
+        newBlock.prev = self.lastChild;
+        self.lastChild.next = newBlock;
+        self.lastChild = newBlock;
+        self.cursor.appendTo(newBlock);
+      }
+      self.cursor.appendTo(cb).redraw();
+      row.after(newrow);
+      this.rowNum++;
+      return false;
+    }
+    else if (e.which === 9 && !e.shiftKey && !currentBlock.next && self.rowNum === 1) { //tab
+        var newBlock = new MathBlock;
+        newBlock.parent = this;
+        var row = $('.matrixrow:last', this.jQ);
+        newBlock.jQ = $('<span class="matrixcell"></span>').data(jQueryDataKey, {block: newBlock}).appendTo(row);
+        this.lastChild = newBlock;
+        currentBlock.next = newBlock;
+        newBlock.prev = currentBlock;
+        this.cursor.appendTo(newBlock).redraw();
+        this.colNum++;
+      return false;
+    } else if (e.which === 8) { //backspace
+      if (currentBlock.isEmpty()) {
+        if (currentBlock.prev) {
+          this.cursor.appendTo(currentBlock.prev);
+        } else {
+          this.cursor.insertBefore(this);
+        }
+        return false;
+      }
+      else if (!this.cursor.prev)
+        return false;
+    } else if (e.which === 37 && e.ctrlKey) {
+      return self.removeCol();
+    } else if (e.which === 38 && e.ctrlKey) {
+      return self.removeRow();
+    } else if (e.which === 39 && e.ctrlKey) {
+      return self.addCol();
+    } else if (e.which === 40 && e.ctrlKey) {
+      return self.addRow();
+    }
+  }
+  return this.parent.keydown(e);
+};
+_.latex = function() {
+  var latex = this.cmd + '{';
+  var child = this.firstChild;
+  latexrows = [];
+  for (var i = 0; i < this.rowNum; i++) {
+    var latexcells = [];
+    for (var j = 0; j < this.colNum; j++){
+      latexcells.push(child.latex());
+      child = child.next;
+    }
+    latexrows.push(latexcells.join(' & '));
+  }
+  latex += latexrows.join(' \\\\ ');
+  latex += '}';
+  return latex;
+};
+_.latex = function() {
+  var latex = this.cmd + '[' + this.colNum + ',' + this.rowNum + ']';
+  var child = this.firstChild;
+  latex += '{' + child.latex() + '}';
+  while (child.next) {
+    child = child.next;
+    latex += '{' + child.latex() + '}';
+  }
+  return latex;
+}
+_.optional_arg_command = 'determ';
+LatexCmds.determ = Determ;
+
+function Matrix(replacedFragment, token, latex) {
+  if (latex && latex[0] === '[') {
+    latex.shift();
+    var cols = '';
+    var rows = '';
+    while (/^[0-9]$/.test(latex[0])){
+      cols += latex.shift();
+    }
+    cols = parseInt(cols);
+    if (latex[0] === ',') {
+      latex.shift();
+      while (/^[0-9]$/.test(latex[0])){
+        rows += latex.shift();
+      }
+      rows = parseInt(rows);
+    } else {
+      rows = cols;
+    }
+    if (latex[0] === ']') {
+      latex.shift();
+    }
+  }
+  this.colNum = cols || 1;
+  this.rowNum = rows || 1;
+  this.init('\\matrix', undefined, undefined, replacedFragment);
+  this.jQ.wrapInner('<span class="matrixbody"></span>');
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">(</span>').prependTo(this.jQ)
+      .add( $('<span class="paren">)</span>').appendTo(this.jQ));
+}
+_ = Matrix.prototype = new Determ;
+_.html_template =
+  ['<span class="block matrix"></span>'];
+_.text_template = ['matrix(',',',',',',',')'];
+_.optional_arg_command = 'matrix';
+LatexCmds.matrix = Matrix;
+
+
+
+
+
+
+
+
+/*
+
+function Matrix(replacedFragment) {
+  MathCommand.call(this, '\\matrix', undefined, undefined, replacedFragment);
+}
+_ = Matrix.prototype = new MathCommand;
+_.html_template = ['<table class="mtable"><tr class="mtr"><td class="mtd"></td></tr></table>'];
+
+_.initBlocks = function(replacedFragment) {
+  var self = this;
+
+  var newBlock, prev;
+  this.firstChild = newBlock = prev =
+    (replacedFragment && replacedFragment.blockify()) || new MathBlock;
+
+  newBlock.jQ = $("<span></span>")
+    .data(jQueryDataKey, {block: newBlock})
+    .append(newBlock.jQ)
+    .appendTo(self.jQ.find("td"));
+
+  newBlock.blur();
+  self.lastChild = newBlock;
+  newBlock.parent = self;
+};
+
+_.placeCursor = function(cursor) {
+  this.cursor = cursor.appendTo(this.firstChild);
+};
+
+_.latex = function() {
+  return '\\begin{matrix}' + this.foldChildren([], function(latex, child) {
+    latex.push(child.latex());
+    return latex;
+  }).join('\\\\') + '\\end{matrix}';
+};
+_.text = function() {
+  return '[' + this.foldChildren([], function(text, child) {
+    text.push(child.text());
+    return text;
+  }).join() + ']';
+}     
+
+_.keydown = function(e) {
+  var currentBlock = this.cursor.parent;
+  var self = this;
+  if (currentBlock.parent === this) {
+    if (e.which === 13) { //enter
+      var tr = $('tr:last', this.jQ).clone(true);
+      var cb;
+      tr.find("td").html('').each(function(){
+        $(this).addClass("mtd");  
+        var newBlock = new MathBlock;
+        cb = cb || newBlock;
+        newBlock.parent = self;
+        newBlock.jQ = $('<span></span>').data(jQueryDataKey, {block: newBlock}).appendTo(this);
+        newBlock.prev = self.lastChild;
+        self.lastChild.next = newBlock; 
+        self.lastChild = newBlock;
+        self.cursor.appendTo(newBlock);
+      });
+      self.cursor.appendTo(cb).redraw();
+      tr.appendTo(this.jQ);
+      return false;
+    }
+    else if (e.which === 9 && !e.shiftKey && !currentBlock.next && self.jQ.find("tr").length == 1) { //tab
+        var newBlock = new MathBlock;
+        newBlock.parent = this;
+        var td =  $('<td class="mtd"></td>').appendTo(currentBlock.jQ.parent().parent());
+        newBlock.jQ = $('<span></span>').data(jQueryDataKey, {block: newBlock}).appendTo(td);
+        this.lastChild = newBlock;
+        currentBlock.next = newBlock;
+        newBlock.prev = currentBlock;
+        this.cursor.appendTo(newBlock).redraw();
+      return false;
+    } else if (e.which === 8) { //backspace
+      if (currentBlock.isEmpty()) {
+        if (currentBlock.prev) {
+          this.cursor.appendTo(currentBlock.prev);
+
+        } else {
+          this.cursor.insertBefore(this);
+        }
+        return false;
+      }
+      else if (!this.cursor.prev)
+        return false;
+    }
+  }
+  return this.parent.keydown(e);
+};
+
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 function Vector(replacedFragment) {
   this.init('\\vector', undefined, undefined, replacedFragment);
 }

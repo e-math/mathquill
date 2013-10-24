@@ -403,3 +403,10 @@
 .mathquill-editable.mathquill-rendered-math {white-space: pre-wrap;}
 .mathquill-editable.mathquill-rendered-math * {white-space: nowrap;}
 .mathquill-rendered-math .cases .array {text-align: left;}
+
+.mathquill-rendered-math .determ {display: inline-block; vertical-align: middle;}
+.mathquill-rendered-math .matrix {display: inline-block; vertical-align: middle;}
+.mathquill-rendered-math .matrixbody {display: inline-block;}
+.mathquill-rendered-math .matrixrow {display: table-row;}
+.mathquill-rendered-math .matrixcell {display: table-cell; text-align: center; padding: 0 0.2em;}
+.mathquill-rendered-math .matrixcell.empty {background-color: transparent; box-shadow: 0 0 1px rgba(0,0,0,0.5);}

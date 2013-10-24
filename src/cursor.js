@@ -234,7 +234,7 @@ _.writeLatex = function(latex) {
           if (latex[0] === '[' && cmd.optional_arg_command) {
             //e.g. \sqrt{m} -> SquareRoot, \sqrt[n]{m} -> NthRoot
             token = cmd.optional_arg_command;
-            cmd = new LatexCmds[token](undefined, token);
+            cmd = new LatexCmds[token](undefined, token, latex);
           }
           cursor.insertNew(cmd);
         }
