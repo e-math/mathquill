@@ -834,39 +834,7 @@ _.keydown = function(e) {
   var currentBlock = this.cursor.parent;
   var self = this;
   if (currentBlock.parent === this) {
-    if (e.which === 13) { //enter
-      var row = $('.matrixrow:last', this.jQ);
-      var colnum = row.find('.matrixcell').length;
-      var newrow = $('<span class="matrixrow"></span>');
-      var cb;
-      
-      for (var i = 0; i < colnum; i++) {
-        var newBlock = new MathBlock;
-        cb = cb || newBlock;
-        newBlock.parent = self;
-        newBlock.jQ = $('<span class="matrixcell"></span>').data(jQueryDataKey, {block: newBlock}).appendTo(newrow);
-        newBlock.prev = self.lastChild;
-        self.lastChild.next = newBlock;
-        self.lastChild = newBlock;
-        self.cursor.appendTo(newBlock);
-      }
-      self.cursor.appendTo(cb).redraw();
-      row.after(newrow);
-      this.rowNum++;
-      return false;
-    }
-    else if (e.which === 9 && !e.shiftKey && !currentBlock.next && self.rowNum === 1) { //tab
-        var newBlock = new MathBlock;
-        newBlock.parent = this;
-        var row = $('.matrixrow:last', this.jQ);
-        newBlock.jQ = $('<span class="matrixcell"></span>').data(jQueryDataKey, {block: newBlock}).appendTo(row);
-        this.lastChild = newBlock;
-        currentBlock.next = newBlock;
-        newBlock.prev = currentBlock;
-        this.cursor.appendTo(newBlock).redraw();
-        this.colNum++;
-      return false;
-    } else if (e.which === 8) { //backspace
+    if (e.which === 8) { //backspace
       if (currentBlock.isEmpty()) {
         if (currentBlock.prev) {
           this.cursor.appendTo(currentBlock.prev);
