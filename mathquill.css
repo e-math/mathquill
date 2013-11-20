@@ -404,9 +404,59 @@
 .mathquill-editable.mathquill-rendered-math * {white-space: nowrap;}
 .mathquill-rendered-math .cases .array {text-align: left;}
 
+/*** Matrix, determinant, case ***/
 .mathquill-rendered-math .determ {display: inline-block; vertical-align: middle;}
 .mathquill-rendered-math .matrix {display: inline-block; vertical-align: middle;}
+.mathquill-rendered-math .case {display: inline-block; vertical-align: middle;}
 .mathquill-rendered-math .matrixbody {display: inline-block;}
 .mathquill-rendered-math .matrixrow {display: table-row;}
 .mathquill-rendered-math .matrixcell {display: table-cell; text-align: center; padding: 0 0.2em;}
 .mathquill-rendered-math .matrixcell.empty {background-color: transparent; box-shadow: 0 0 1px rgba(0,0,0,0.5);}
+.mathquill-rendered-math .casebody {display: inline-block;}
+.mathquill-rendered-math .caserow {display: table-row;}
+.mathquill-rendered-math .casecell {display: table-cell; text-align: left; padding: 0 0.2em;}
+.mathquill-rendered-math .casecell.empty {background-color: transparent; box-shadow: 0 0 1px rgba(0,0,0,0.5);}
+
+/*** abs, norm ***/
+.mathquill-rendered-math .abs {display: inline-block;}
+.mathquill-rendered-math .norm {display: inline-block;}
+
+/*** open, half open and closed intervals ***/
+.mathquill-rendered-math .intervalblock .paren {font-weight: bolder;}
+.mathquill-rendered-math .openLeft,
+.mathquill-rendered-math .openRight,
+.mathquill-rendered-math .openBoth,
+.mathquill-rendered-math .closed,
+.mathquill-rendered-math .openleft,
+.mathquill-rendered-math .openright,
+.mathquill-rendered-math .openboth,
+.mathquill-rendered-math .intervalelement
+{display: inline-block;}
+.mathquill-rendered-math .intervalseparator {margin-left: 0.3em; margin-right: 0.3em; font-weight: bold; vertical-align: bottom; font-size: 110%;}
+.mathquill-rendered-math .intervalsecond:before {content: ","; font-weight: bold; margin-left: 0.5em; position: relative; left: -0.4em;}
+
+/*** Integral and integral substitution (Finnish syntax) ***/
+.mathquill-rendered-math .integralblock .Int.block {display: inline-block; vertical-align: middle; margin-top: 0.4em;}
+.mathquill-rendered-math .integralblock .integral {display: inline-block; padding-top: 0.3em; padding-bottom: 0.3em;}
+.mathquill-rendered-math .integralblock .integraldifferential {margin-left: 0.3em; display: inline-block;}
+.mathquill-rendered-math .integralblock .integraldifferential:first-letter {font-style: normal;}
+.mathquill-rendered-math .integralblock .bigoperatorstack {display: inline-block; vertical-align: middle; padding: 0 0.3em 0 0.2;}
+.mathquill-rendered-math .integralblock .bigoperatorstack > span {display: block; margin: 0; padding: 0;}
+.mathquill-rendered-math .integralblock .bigoperatorstack .bigoperator {display: block; vertical-align: bottom; margin: 0 auto; text-align: center;}
+.mathquill-rendered-math .integralblock .bigoperatorstack .integralfrom {font-size: 80%; margin-right: 0.4em; text-align: center;}
+.mathquill-rendered-math .integralblock .bigoperatorstack .integralto {margin-left: 0.4em; font-size: 80%; text-align: center;}
+.mathquill-rendered-math .integralblock .bigoperatorstack .integralfrom .fraction,
+.mathquill-rendered-math .integralblock .bigoperatorstack .integralto .fraction {font-size: 70%;}
+
+/*** Sum and Product in display style ***/
+.mathquill-rendered-math .opblock .bigopblock.block {display: inline-block; vertical-align: middle; margin-left: 0.2em;}
+.mathquill-rendered-math .opblock .opexpression {display: inline-block; padding-top: 0.3em; padding-bottom: 0.3em;}
+.mathquill-rendered-math .opblock .bigoperatorstack {display: inline-block; vertical-align: middle; padding: 0 0.3em 0 0.2;}
+.mathquill-rendered-math .opblock .bigoperatorstack > span {display: block; margin: 0; padding: 0;}
+.mathquill-rendered-math .opblock .bigoperatorstack .bigoperator {display: block; vertical-align: bottom; margin: 0 auto; text-align: center;}
+.mathquill-rendered-math .opblock .bigoperatorstack .opfrom {font-size: 80%; text-align: center;}
+.mathquill-rendered-math .opblock .bigoperatorstack .opto {font-size: 80%; text-align: center;}
+.mathquill-rendered-math .opblock .bigoperatorstack .opfrom .fraction,
+.mathquill-rendered-math .opblock .bigoperatorstack .opto .fraction {font-size: 70%;}
+
+

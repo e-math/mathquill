@@ -368,6 +368,389 @@ _.placeCursor = function(cursor) {
 
 LatexCmds.lpipe = LatexCmds.rpipe = CharCmds['|'] = Pipes;
 
+/***
+ * Abs and Norm functions for E-Math
+ ***/
+
+function Abs(replacedFragment){
+  this.init('\\abs', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">|</span>').prependTo(this.jQ)
+      .add($('<span class="paren">|</span>').appendTo(this.jQ));
+}
+_ = Abs.prototype = new MathCommand;
+_.html_template = [
+  '<span class="block"></span>',
+  '<span class="abs"></span>'
+];
+_.text_template = ['abs(',')'];
+_.redraw = Bracket.prototype.redraw;
+LatexCmds.abs = CharCmds['|'] = Abs;
+
+function Norm(replacedFragment){
+  this.init('\\norm', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">||</span>').prependTo(this.jQ)
+      .add($('<span class="paren">||</span>').appendTo(this.jQ));
+}
+_ = Norm.prototype = new MathCommand;
+_.html_template = [
+  '<span class="block"></span>',
+  '<span class="norm"></span>'
+];
+_.text_template = ['norm(',')'];
+_.redraw = Bracket.prototype.redraw;
+LatexCmds.norm = Norm;
+
+/***
+ * Open and half open intervals for E-Math
+ ***/
+
+function OpenBoth(replacedFragment){
+  this.init('\\openBoth', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">]</span>').prependTo(this.jQ)
+      .add($('<span class="paren">[</span>').appendTo(this.jQ));
+}
+_ = OpenBoth.prototype = new MathCommand;
+_.html_template = [
+  '<span class="block intervalblock"></span>'
+];
+_.text_template = ['openBoth(',',',')'];
+_.initBlocks = function(replacedFragment){
+  var newBlock, first, second;
+  this.firstChild = newBlock = first =
+    (replacedFragment && replacedFragment.blockify()) || new MathBlock;
+  var interval = this.jQ.append('<span class="' + this.cmd.substr(1) + ' interval block"></span>').find('.interval');
+  newBlock.jQ = $('<span class="intervalelement"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(newBlock.jQ)
+    .appendTo(interval);
+  interval.append('<span class="intervalseparator">,</span>');
+  first.next = newBlock = second = new MathBlock;
+  newBlock.jQ = $('<span class="intervalelement"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(newBlock.jQ)
+    .appendTo(interval);
+  second.prev = first;
+  this.lastChild = second;
+  first.blur();
+  second.blur();
+  first.parent = second.parent = this;
+}
+_.redraw = Bracket.prototype.redraw;
+LatexCmds.openBoth = OpenBoth;
+
+function Closedinterval(replacedFragment){
+  this.init('\\closed', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">[</span>').prependTo(this.jQ)
+      .add($('<span class="paren">]</span>').appendTo(this.jQ));
+}
+_ = Closedinterval.prototype = new OpenBoth;
+_.text_template = ['closed(',',',')'];
+LatexCmds.closed = Closedinterval;
+
+function OpenLeft(replacedFragment){
+  this.init('\\openLeft', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">]</span>').prependTo(this.jQ)
+      .add($('<span class="paren">]</span>').appendTo(this.jQ));
+}
+_ = OpenLeft.prototype = new OpenBoth;
+_.text_template = ['openLeft(',',',')'];
+LatexCmds.openLeft = OpenLeft;
+
+function OpenRight(replacedFragment){
+  this.init('\\openRight', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">[</span>').prependTo(this.jQ)
+      .add($('<span class="paren">[</span>').appendTo(this.jQ));
+}
+_ = OpenRight.prototype = new OpenBoth;
+_.text_template = ['openRight(',',',')'];
+LatexCmds.openRight = OpenRight;
+
+function Openleft(replacedFragment){
+  this.init('\\openleft', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">(</span>').prependTo(this.jQ)
+      .add($('<span class="paren">]</span>').appendTo(this.jQ));
+}
+_ = Openleft.prototype = new OpenBoth;
+_.text_template = ['openleft(',',',')'];
+LatexCmds.openleft = Openleft;
+
+function Openright(replacedFragment){
+  this.init('\\openright', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">[</span>').prependTo(this.jQ)
+      .add($('<span class="paren">)</span>').appendTo(this.jQ));
+}
+_ = Openright.prototype = new OpenBoth;
+_.text_template = ['openright(',',',')'];
+LatexCmds.openright = Openright;
+
+function Openboth(replacedFragment){
+  this.init('\\openboth', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">(</span>').prependTo(this.jQ)
+      .add($('<span class="paren">)</span>').appendTo(this.jQ));
+}
+_ = Openboth.prototype = new OpenBoth;
+_.text_template = ['openboth(',',',')'];
+LatexCmds.openboth = Openboth;
+
+/***
+ * Integral for E-Math
+ ***/
+
+function Integral(replacedFragment){
+  this.init('\\Int', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children().eq(1);
+}
+_ = Integral.prototype = new MathCommand;
+_.html_template = [
+  '<span class="block integralblock"></span>'
+];
+_.text_template = ['Integral(',',',',',')'];
+_.initBlocks = function(replacedFragment){
+  this.blockjQ = this.jQ.children();
+  console.log(this.blockjQ);
+  this.bracketjQs =
+    $('<span class="bigoperatorstack"><span><span class="bigoperator">&int;</span></span></span>').prependTo(this.jQ);
+  this.bigoperatorjQ = this.bracketjQs.find('.bigoperator');
+  var newBlock, intfrom, intto, integrand, intdx;
+  intfrom = new MathBlock;
+  intto = new MathBlock;
+  intdx = new MathBlock;
+  newBlock = integrand =
+    (replacedFragment && replacedFragment.blockify()) || new MathBlock;
+  var intblock = this.jQ.append('<span class="' + this.cmd.substr(1) + ' block"></span>').find('span:last');
+  intfrom.jQ = $('<span class="integralfrom limit"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(intfrom.jQ)
+    .appendTo(this.bracketjQs);
+  intto.jQ = $('<span class="integralto limit"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(intto.jQ)
+    .prependTo(this.bracketjQs);
+  newBlock.jQ = $('<span class="integral"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(newBlock.jQ)
+    .appendTo(intblock);
+  intdx.jQ = $('<span class="integraldifferential"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(intdx.jQ)
+    .appendTo(intblock);
+  this.firstChild = intfrom;
+  intfrom.next = intto;
+  intto.prev = intfrom;
+  intto.next = integrand;
+  integrand.prev = intto;
+  integrand.next = intdx;
+  intdx.prev = integrand;
+  this.lastChild = intdx;
+  intfrom.blur();
+  intto.blur();
+  integrand.blur();
+  intdx.blur();
+  intfrom.parent = intto.parent = integrand.parent = intdx.parent = this;
+}
+_.redraw = Bracket.prototype.redraw;
+_.redraw = function() {
+  var outerheight = this.blockjQ.outerHeight();
+  var height = outerheight/+this.blockjQ.css('fontSize').slice(0,-2);
+  scale(this.bigoperatorjQ, min(1 + .2*(height - 1), 1.2), 0.95*height);
+  this.bigoperatorjQ.css('line-height', outerheight+'px');
+  this.bigoperatorjQ.parent().css('height', outerheight);
+};
+LatexCmds.Int = LatexCmds.Integral = Integral;
+
+/***
+ * Integral substitution: Finnish syntax for E-Math
+ ***/
+
+function IntegralSubst(replacedFragment){
+  this.init('\\Intsubst', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children().eq(1);
+}
+_ = IntegralSubst.prototype = new MathCommand;
+_.html_template = [
+  '<span class="block integralblock"></span>'
+];
+_.text_template = ['Integralsubst(',',',')'];
+_.initBlocks = function(replacedFragment){
+  this.blockjQ = this.jQ.children();
+  console.log(this.blockjQ);
+  this.bracketjQs =
+    $('<span class="bigoperatorstack"><span><span class="bigoperator">/</span></span></span>').prependTo(this.jQ);
+  this.bigoperatorjQ = this.bracketjQs.find('.bigoperator');
+  var newBlock, intfrom, intto, integrand, intdx;
+  intfrom = new MathBlock;
+  intto = new MathBlock;
+  newBlock = integrand =
+    (replacedFragment && replacedFragment.blockify()) || new MathBlock;
+  var intblock = this.jQ.append('<span class="' + this.cmd.substr(1) + ' block"></span>').find('span:last');
+  intfrom.jQ = $('<span class="integralfrom limit"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(intfrom.jQ)
+    .appendTo(this.bracketjQs);
+  intto.jQ = $('<span class="integralto limit"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(intto.jQ)
+    .prependTo(this.bracketjQs);
+  newBlock.jQ = $('<span class="integral"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(newBlock.jQ)
+    .appendTo(intblock);
+  this.firstChild = intfrom;
+  intfrom.next = intto;
+  intto.prev = intfrom;
+  intto.next = integrand;
+  integrand.prev = intto;
+  this.lastChild = integrand;
+  intfrom.blur();
+  intto.blur();
+  integrand.blur();
+  intfrom.parent = intto.parent = integrand.parent = this;
+}
+_.redraw = Bracket.prototype.redraw;
+_.redraw = function() {
+  var outerheight = this.blockjQ.outerHeight();
+  var height = outerheight/+this.blockjQ.css('fontSize').slice(0,-2);
+  scale(this.bigoperatorjQ, min(1 + .2*(height - 1), 1.2), 0.95*height);
+  this.bigoperatorjQ.css('line-height', outerheight+'px');
+  this.bigoperatorjQ.parent().css('height', outerheight);
+};
+LatexCmds.Intsubst = LatexCmds.IntegralSubst = IntegralSubst;
+
+/***
+ * Display style sum for E-Math
+ ***/
+
+function BigSum(replacedFragment){
+  this.init('\\Sum', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children().eq(1);
+}
+_ = BigSum.prototype = new MathCommand;
+_.html_template = [
+  '<span class="block opblock"></span>'
+];
+_.text_template = ['Sum(',',',')'];
+_.initBlocks = function(replacedFragment){
+  this.blockjQ = this.jQ.children();
+  console.log(this.blockjQ);
+  this.bracketjQs =
+    $('<span class="bigoperatorstack"><span><span class="bigoperator">&Sigma;</span></span></span>').prependTo(this.jQ);
+  this.bigoperatorjQ = this.bracketjQs.find('.bigoperator');
+  var newBlock, opfrom, opto, expression;
+  opfrom = new MathBlock;
+  opto = new MathBlock;
+  newBlock = expression =
+    (replacedFragment && replacedFragment.blockify()) || new MathBlock;
+  var opblock = this.jQ.append('<span class="bigopblock block"></span>').find('span:last');
+  opfrom.jQ = $('<span class="opfrom limit"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(opfrom.jQ)
+    .appendTo(this.bracketjQs);
+  opto.jQ = $('<span class="opto limit"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(opto.jQ)
+    .prependTo(this.bracketjQs);
+  newBlock.jQ = $('<span class="opexpression"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(newBlock.jQ)
+    .appendTo(opblock);
+  this.firstChild = opfrom;
+  opfrom.next = opto;
+  opto.prev = opfrom;
+  opto.next = expression;
+  expression.prev = opto;
+  this.lastChild = expression;
+  opfrom.blur();
+  opto.blur();
+  expression.blur();
+  opfrom.parent = opto.parent = expression.parent = this;
+}
+_.redraw = Bracket.prototype.redraw;
+_.redraw = function() {
+  var outerheight = this.blockjQ.outerHeight();
+  var height = outerheight/+this.blockjQ.css('fontSize').slice(0,-2);
+  scale(this.bigoperatorjQ, 0.95*height, 0.95*height);
+  this.bigoperatorjQ.css('line-height', outerheight+'px');
+  this.bigoperatorjQ.parent().css('height', outerheight);
+};
+LatexCmds.Sum = LatexCmds.BigSum = BigSum;
+
+/***
+ * Display style product for E-Math
+ ***/
+
+function BigProd(replacedFragment){
+  this.init('\\Prod', undefined, undefined, replacedFragment);
+  this.blockjQ = this.jQ.children().eq(1);
+}
+_ = BigProd.prototype = new MathCommand;
+_.html_template = [
+  '<span class="block opblock"></span>'
+];
+_.text_template = ['Product(',',',')'];
+_.initBlocks = function(replacedFragment){
+  this.blockjQ = this.jQ.children();
+  console.log(this.blockjQ);
+  this.bracketjQs =
+    $('<span class="bigoperatorstack"><span><span class="bigoperator">&Pi;</span></span></span>').prependTo(this.jQ);
+  this.bigoperatorjQ = this.bracketjQs.find('.bigoperator');
+  var newBlock, opfrom, opto, expression;
+  opfrom = new MathBlock;
+  opto = new MathBlock;
+  newBlock = expression =
+    (replacedFragment && replacedFragment.blockify()) || new MathBlock;
+  var opblock = this.jQ.append('<span class="bigopblock block"></span>').find('span:last');
+  opfrom.jQ = $('<span class="opfrom limit"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(opfrom.jQ)
+    .appendTo(this.bracketjQs);
+  opto.jQ = $('<span class="opto limit"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(opto.jQ)
+    .prependTo(this.bracketjQs);
+  newBlock.jQ = $('<span class="opexpression"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .append(newBlock.jQ)
+    .appendTo(opblock);
+  this.firstChild = opfrom;
+  opfrom.next = opto;
+  opto.prev = opfrom;
+  opto.next = expression;
+  expression.prev = opto;
+  this.lastChild = expression;
+  opfrom.blur();
+  opto.blur();
+  expression.blur();
+  opfrom.parent = opto.parent = expression.parent = this;
+}
+_.redraw = Bracket.prototype.redraw;
+_.redraw = function() {
+  var outerheight = this.blockjQ.outerHeight();
+  var height = outerheight/+this.blockjQ.css('fontSize').slice(0,-2);
+  scale(this.bigoperatorjQ, 0.95*height, 0.95*height);
+  this.bigoperatorjQ.css('line-height', outerheight+'px');
+  this.bigoperatorjQ.parent().css('height', outerheight);
+};
+LatexCmds.Prod = LatexCmds.BigProd = BigProd;
+
+
 function TextBlock(replacedText) {
   if (replacedText instanceof MathFragment)
     this.replacedText = replacedText.remove().jQ.text();
@@ -638,6 +1021,188 @@ _.text_template = ['case(',',',')'];
 _.redraw = Bracket.prototype.redraw;
 LatexCmds.cases = LatexCmds.cases = Cases;
 
+function Case(replacedFragment, token, latex) {
+  if (latex && latex[0] === '[') {
+    latex.shift();
+    var rows = '';
+    while (/^[0-9]$/.test(latex[0])){
+      rows += latex.shift();
+    }
+    rows = parseInt(rows);
+    if (latex[0] === ']') {
+      latex.shift();
+    }
+  }
+  this.rowNum = rows || 1;
+  this.editlock = false;
+  this.init('\\case', undefined, undefined, replacedFragment);
+  this.jQ.wrapInner('<span class="casebody"></span>');
+  this.blockjQ = this.jQ.children();
+  this.bracketjQs =
+    $('<span class="paren">{</span>').prependTo(this.jQ)
+      .add( $('<span class="paren"></span>').appendTo(this.jQ));
+}
+_ = Case.prototype = new MathCommand;
+_.html_template = ['<span class="block case"></span>'];
+_.text_template = ['case(',',',')'];
+_.redraw = Bracket.prototype.redraw;
+_.initBlocks = function(replacedFragment) {
+  var self = this;
+  var newTermBlock, newExplBlock, prev;
+  
+  this.firstChild = newTermBlock =
+    (replacedFragment && replacedFragment.blockify()) || new MathBlock;
+  newExplBlock = new MathBlock;
+  
+  this.jQ.append('<span class="caserow"></span>');
+  var crow = this.jQ.find('.caserow:last');
+  newTermBlock.jQ = $('<span class="casecell"></span>')
+    .data(jQueryDataKey, {block: newTermBlock})
+    .append(newTermBlock.jQ)
+    .appendTo(crow);
+  newExplBlock.jQ = $('<span class="casecell caseexpl"></span>')
+    .data(jQueryDataKey, {block: newExplBlock})
+    .append(newExplBlock.jQ)
+    .appendTo(crow);
+  newTermBlock.next = newExplBlock;
+  newExplBlock.prev = newTermBlock;
+  this.lastChild = newExplBlock;
+  newTermBlock.blur();
+  newExplBlock.blur();
+  newTermBlock.parent = newExplBlock.parent = self;
+  
+  for (var i = 1; i < this.rowNum; i++) {
+    this.jQ.append('<span class="caserow"></span>');
+    var crow = this.jQ.find('.caserow:last');
+    newTermBlock = new MathBlock;
+    newExplBlock = new MathBlock;
+    newTermBlock.jQ = $('<span class="casecell"></span>')
+      .data(jQueryDataKey, {block: newTermBlock})
+      .append(newTermBlock.jQ)
+      .appendTo(crow);
+    newExplBlock.jQ = $('<span class="casecell caseexpl"></span>')
+      .data(jQueryDataKey, {block: newExplBlock})
+      .append(newExplBlock.jQ)
+      .appendTo(crow);
+    newTermBlock.next = newExplBlock;
+    newExplBlock.prev = newTermBlock;
+    this.lastChild.next = newTermBlock;
+    newTermBlock.prev = this.lastChild;
+    this.lastChild = newExplBlock;
+    newTermBlock.blur();
+    newExplBlock.blur();
+    newTermBlock.parent = newExplBlock.parent = self;
+  }
+}
+_.placeCursor = function(cursor) {
+  this.cursor = cursor.appendTo(this.firstChild);
+};
+_.addRow = function() {
+  if (this.editlock) {
+    return false;
+  } else {
+    this.editlock = true;
+  }
+  var newrow = $('<span class="caserow"></span>');
+  var row = $('.caserow:last', this.jQ);
+  
+  var newTermBlock = new MathBlock;
+  var newExplBlock = new MathBlock;
+
+  newTermBlock.parent = this;
+  newExplBlock.parent = this;
+  newTermBlock.jQ = $('<span class="casecell"></span>').data(jQueryDataKey, {block: newTermBlock}).appendTo(newrow);
+  newExplBlock.jQ = $('<span class="casecell caseexpl"></span>').data(jQueryDataKey, {block: newExplBlock}).appendTo(newrow);
+  this.lastChild.next = newTermBlock;
+  newTermBlock.prev = this.lastChild;
+  newTermBlock.next = newExplBlock;
+  newExplBlock.prev = newTermBlock;
+  this.lastChild = newExplBlock;
+  this.cursor.appendTo(newTermBlock);
+  this.cursor.appendTo(newExplBlock);
+
+  row.after(newrow);
+  this.cursor.appendTo(newTermBlock).redraw();
+  this.rowNum++;
+  this.editlock = false;
+  return false;
+}
+_.removeRow = function() {
+  if (this.rowNum === 1 || this.editlock) {
+    return false;
+  } else {
+    this.editlock = true;
+  }
+  var row = $('.caserow:last', this.jQ);
+  var curr = this.lastChild;
+  var prev = curr.prev;
+  for (var i = 0; i < 2; i++) {
+    curr.next = null;
+    curr.prev = null;
+    curr.parent = null;
+    curr.jQ.remove();
+    curr = prev;
+    curr.next = null;
+    prev = curr.prev;
+  }
+  this.lastChild = curr;
+  row.remove();
+  this.rowNum--;
+  this.cursor.appendTo(curr).redraw();
+  this.editlock = false;
+  return false;
+}
+_.keydown = function(e) {
+  var currentBlock = this.cursor.parent;
+  var self = this;
+  if (currentBlock.parent === this) {
+    if (e.which === 8) { //backspace
+      if (currentBlock.isEmpty()) {
+        if (currentBlock.prev) {
+          this.cursor.appendTo(currentBlock.prev);
+        } else {
+          this.cursor.insertBefore(this);
+        }
+        return false;
+      }
+      else if (!this.cursor.prev)
+        return false;
+    } else if (e.which === 38 && e.ctrlKey) {
+      return self.removeRow();
+    } else if (e.which === 40 && e.ctrlKey) {
+      return self.addRow();
+    }
+  }
+  return this.parent.keydown(e);
+};
+_.latex = function() {
+  var latex = this.cmd + '[' + this.rowNum + ']';
+  var child = this.firstChild;
+  latex += '{' + child.latex() + '}';
+  while (child.next) {
+    child = child.next;
+    latex += '{' + child.latex() + '}';
+  }
+  return latex;
+}
+_.text = function() {
+  var text = this.cmd.substr(1) + '(';
+  var child = this.firstChild;
+  var matrix = [];
+  for (var i = 0; i < this.rowNum; i++) {
+    var row = [];
+    for (var j = 0; j < 2 && !!child; j++){
+      row.push(child.text().toString());
+      child = child.next;
+    }
+    matrix.push('[' + row.join(',') + ']');
+  }
+  text += '[' + matrix.join(',') +']' + ')';
+  return text;
+}
+_.optional_arg_command = 'case';
+LatexCmds.case = Case;
+
 function Determ(replacedFragment, token, latex) {
   if (latex && latex[0] === '[') {
     latex.shift();
@@ -722,7 +1287,6 @@ _.addRow = function() {
   }
   var newrow = $('<span class="matrixrow"></span>');
   var row = $('.matrixrow:last', this.jQ);
-  var newrow = $('<span class="matrixrow"></span>');
   var cb;
   
   for (var i = 0; i < this.colNum; i++) {
@@ -858,22 +1422,6 @@ _.keydown = function(e) {
   return this.parent.keydown(e);
 };
 _.latex = function() {
-  var latex = this.cmd + '{';
-  var child = this.firstChild;
-  latexrows = [];
-  for (var i = 0; i < this.rowNum; i++) {
-    var latexcells = [];
-    for (var j = 0; j < this.colNum; j++){
-      latexcells.push(child.latex());
-      child = child.next;
-    }
-    latexrows.push(latexcells.join(' & '));
-  }
-  latex += latexrows.join(' \\\\ ');
-  latex += '}';
-  return latex;
-};
-_.latex = function() {
   var latex = this.cmd + '[' + this.colNum + ',' + this.rowNum + ']';
   var child = this.firstChild;
   latex += '{' + child.latex() + '}';
@@ -882,6 +1430,21 @@ _.latex = function() {
     latex += '{' + child.latex() + '}';
   }
   return latex;
+}
+_.text = function() {
+  var text = this.cmd.substr(1) + '(';
+  var child = this.firstChild;
+  var matrix = [];
+  for (var i = 0; i < this.rowNum; i++) {
+    var row = [];
+    for (var j = 0; j < this.colNum && !!child; j++){
+      row.push(child.text().toString());
+      child = child.next;
+    }
+    matrix.push('[' + row.join(',') + ']');
+  }
+  text += '[' + matrix.join(',') +']' + ')';
+  return text;
 }
 _.optional_arg_command = 'determ';
 LatexCmds.determ = Determ;
