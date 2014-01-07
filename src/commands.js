@@ -366,7 +366,13 @@ _.placeCursor = function(cursor) {
     cursor.appendTo(this.firstChild);
 };
 
+_.latex = function() {
+  return '\\abs{' + this.firstChild.latex() + '}';
+};
+
+
 LatexCmds.lpipe = LatexCmds.rpipe = CharCmds['|'] = Pipes;
+//LatexCmds.lpipe = LatexCmds.rpipe = Pipes;
 
 /***
  * Abs and Norm functions for E-Math
@@ -386,7 +392,8 @@ _.html_template = [
 ];
 _.text_template = ['abs(',')'];
 _.redraw = Bracket.prototype.redraw;
-LatexCmds.abs = CharCmds['|'] = Abs;
+//LatexCmds.abs = CharCmds['|'] = Abs;
+LatexCmds.abs = CharCmds['\u00a6'] = Abs; // Use ¦ for shortcut
 
 function Norm(replacedFragment){
   this.init('\\norm', undefined, undefined, replacedFragment);
