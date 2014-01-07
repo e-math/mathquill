@@ -1,3 +1,13 @@
+# MathQuill - E-Math edition
+
+This is a fork of [MathQuill](http://mathquill.github.com) by [Han][] and [Jay][].
+[E-Math -project](http://emath.eu) has added some additional features that
+are used in the interactive mathbook.
+
+## License
+This version is licensed under [GNU Lesser General Public License](http://www.gnu.org/licenses/lgpl.html)
+as the original one.
+
 # [MathQuill](http://mathquill.github.com)
 
 by [Han][] and [Jay][].  Current development is proudly supported by [Desmos][], whose awesome graphing calculator makes extensive use of Mathquill.
