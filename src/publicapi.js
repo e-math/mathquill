@@ -75,6 +75,7 @@ $.fn.mathquill = function(cmd, latex) {
       editable = textbox || cmd === 'editable',
       RootBlock = textbox ? RootTextBlock : RootMathBlock;
     return this.each(function() {
+      $(this).attr('tabindex', '-1');
       createRoot($(this), new RootBlock, textbox, editable);
     });
   }
