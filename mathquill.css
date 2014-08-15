@@ -415,7 +415,8 @@
 .mathquill-rendered-math .casebody {display: inline-block;}
 .mathquill-rendered-math .caserow {display: table-row;}
 .mathquill-rendered-math .casecell {display: table-cell; text-align: left; padding: 0 0.2em;}
-.mathquill-rendered-math .casecell.empty {background-color: transparent; box-shadow: 0 0 1px rgba(0,0,0,0.5);}
+.mathquill-rendered-math .casecell.empty {background-color: transparent;}
+.mathquill-editable .casecell.empty {background-color: transparent; box-shadow: 0 0 1px rgba(0,0,0,0.5);}
 
 /*** abs, norm ***/
 .mathquill-rendered-math .abs {display: inline-block;}
