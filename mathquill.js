@@ -424,6 +424,9 @@ function createRoot(jQ, root, textbox, editable) {
     return false;
   });
 
+  // Insert to DOM before binding events to avoid memory leaks.
+  jQ.prepend(textareaSpan);
+
   if (!editable) {
     jQ.bind('cut paste', false).bind('copy', setTextareaSelection)
       .prepend('<span class="selectable">$'+root.latex()+'$</span>');
@@ -436,8 +439,6 @@ function createRoot(jQ, root, textbox, editable) {
     }
     return;
   }
-
-  jQ.prepend(textareaSpan);
 
   //root CSS classes
   jQ.addClass('mathquill-editable');
@@ -808,10 +809,11 @@ _.textInput = function(ch) {
   if (this.skipTextInput) return;
 
   this.cursor.deleteSelection();
-  if (ch === '$')
+  if (ch === '$') {
     this.cursor.insertNew(new RootMathCommand(this.cursor));
-  else
+  } else {
     this.cursor.insertNew(new VanillaSymbol(ch));
+  }
 };
 
 /***************************
@@ -3699,6 +3701,7 @@ $.fn.mathquill = function(cmd, latex) {
       editable = textbox || cmd === 'editable',
       RootBlock = textbox ? RootTextBlock : RootMathBlock;
     return this.each(function() {
+      $(this).attr('tabindex', '-1');
       createRoot($(this), new RootBlock, textbox, editable);
     });
   }
