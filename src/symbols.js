@@ -325,8 +325,9 @@ LatexCmds.SS = bind(VanillaSymbol, '\\SS','&#120138;');
 LatexCmds.TT = bind(VanillaSymbol, '\\TT','&#120139;');
 LatexCmds.UU = bind(VanillaSymbol, '\\UU','&#120140;');
 LatexCmds.VV = bind(VanillaSymbol, '\\VV','&#120141;');
-LatexCmds.XX = bind(VanillaSymbol, '\\XX','&#120142;');
-LatexCmds.YY = bind(VanillaSymbol, '\\YY','&#120143;');
+LatexCmds.WW = bind(VanillaSymbol, '\\WW','&#120142;');
+LatexCmds.XX = bind(VanillaSymbol, '\\XX','&#120143;');
+LatexCmds.YY = bind(VanillaSymbol, '\\YY','&#120144;');
 
 //spacing
 LatexCmds.quad = LatexCmds.emsp = bind(VanillaSymbol,'\\quad ','    ');
