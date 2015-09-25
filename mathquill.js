@@ -3713,7 +3713,7 @@ $.fn.mathquill = function(cmd, latex) {
 $(function() {
   $('.mathquill-editable:not(.mathquill-rendered-math)').mathquill('editable');
   $('.mathquill-textbox:not(.mathquill-rendered-math)').mathquill('textbox');
-  $('.mathquill-embedded-latex').mathquill();
+  $('.mathquill-embedded-latex:not(.mathquill-rendered-math)').mathquill();
 });
 
 
