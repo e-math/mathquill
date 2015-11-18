@@ -437,11 +437,11 @@
 .mathquill-rendered-math .intervalsecond:before {content: ","; font-weight: bold; margin-left: 0.5em; position: relative; left: -0.4em;}
 
 /*** Integral and integral substitution (Finnish syntax) ***/
-.mathquill-rendered-math .integralblock .Int.block {display: inline-block; vertical-align: middle; margin-top: 0.4em;}
+.mathquill-rendered-math .integralblock .Int.block {display: inline-block; vertical-align: baseline; margin-top: 0.4em;}
 .mathquill-rendered-math .integralblock .integral {display: inline-block; padding-top: 0.3em; padding-bottom: 0.3em;}
 .mathquill-rendered-math .integralblock .integraldifferential {margin-left: 0.3em; display: inline-block;}
 .mathquill-rendered-math .integralblock .integraldifferential:first-letter {font-style: normal;}
-.mathquill-rendered-math .integralblock .bigoperatorstack {display: inline-block; vertical-align: middle; padding: 0 0.3em 0 0.2;}
+.mathquill-rendered-math .integralblock .bigoperatorstack {display: inline-block; vertical-align: middle;margin-bottom:0.4em;}
 .mathquill-rendered-math .integralblock .bigoperatorstack > span {display: block; margin: 0; padding: 0;}
 .mathquill-rendered-math .integralblock .bigoperatorstack .bigoperator {display: block; vertical-align: bottom; margin: 0 auto; text-align: center;}
 .mathquill-rendered-math .integralblock .bigoperatorstack .integralfrom {font-size: 80%; margin-right: 0.4em; text-align: center;}
