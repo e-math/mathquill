@@ -61,6 +61,7 @@
 }
 
 .mathquill-editable .cursor {
+  display: inline-block;
   border-left: 1px solid black;
   margin-right: -1px;
   position: relative;
