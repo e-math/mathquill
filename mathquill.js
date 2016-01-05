@@ -1865,7 +1865,6 @@ _.redraw = function() {
   scale(this.bracketjQs, min(1 + .2*(height - 1), 1.2), 1.05*height);
 };
 LatexCmds.func = Functions;
-
 //// Pesasa added \cases for E-math
 function Cases(replacedFragment) {
   this.init('\\cases', undefined, undefined, replacedFragment);
@@ -2762,7 +2761,7 @@ LatexCmds.complexplane = LatexCmds.Complexplane = LatexCmds.ComplexPlane =
 
 LatexCmds.H = LatexCmds.Hamiltonian = LatexCmds.quaternions = LatexCmds.Quaternions =
   bind(VanillaSymbol,'\\mathbb{H}','&#8461;');
-
+  
 // pekasa added true and false
 LatexCmds.dollar = bind(VanillaSymbol, '\\dollar','$');
 // pekasa added true and false
