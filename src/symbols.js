@@ -300,6 +300,12 @@ LatexCmds.complexplane = LatexCmds.Complexplane = LatexCmds.ComplexPlane =
 
 LatexCmds.H = LatexCmds.Hamiltonian = LatexCmds.quaternions = LatexCmds.Quaternions =
   bind(VanillaSymbol,'\\mathbb{H}','&#8461;');
+  
+// pekasa added true and false
+LatexCmds.dollar = bind(VanillaSymbol, '\\dollar','$');
+// pekasa added true and false
+LatexCmds.T = LatexCmds.true = bind(VanillaSymbol, '\\T','T');
+LatexCmds.F = LatexCmds.false = bind(VanillaSymbol, '\\F','F');
 
 // pesasa added some working alternatives for sets of numbers as long as \\mathbb{} is broken.
 LatexCmds.NN = bind(VanillaSymbol, '\\NN','&#8469;');

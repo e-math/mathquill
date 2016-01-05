@@ -1829,6 +1829,42 @@ _ = Choose.prototype = new Binomial;
 _.placeCursor = LiveFraction.prototype.placeCursor;
 
 LatexCmds.choose = Choose;
+//// Pekasa added
+function Functions(replacedFragment) {
+  this.init('\\func', ['<span class="block functionsblock"></span>'], ['Functions(',',',')'], replacedFragment);
+  this.blockjQ = this.jQ.children();
+}
+_ = Functions.prototype = new MathCommand;
+_.initBlocks = function(replacedFragment){
+  this.blockjQ = this.jQ.children();
+  var newBlock, fname, fparams;
+  fname = new MathBlock;
+  newBlock = fparams =
+    (replacedFragment && replacedFragment.blockify()) || new MathBlock;
+  fname.jQ = $('<span class="funcname block"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .prependTo(this.jQ);
+  fparams.jQ = $('<span class="funcparams block"></span>')
+    .data(jQueryDataKey, {block: newBlock})
+    .appendTo(this.jQ);
+  this.firstChild = fname;
+  fname.next = fparams;
+  fparams.prev = fname;
+  this.lastChild = fparams;
+  this.bracketjQs =
+    $('<span class="paren">(</span>').insertBefore(fparams.jQ)
+    .add( $('<span class="paren">)</span>').insertAfter(fparams.jQ) );
+  fname.blur();
+  fparams.blur();
+  fname.parent = fparams.parent = this;
+}
+_.redraw = Bracket.prototype.redraw;
+_.redraw = function() {
+  var outerheight = this.jQ.outerHeight();
+  var height = outerheight/+this.blockjQ.css('fontSize').slice(0,-2);
+  scale(this.bracketjQs, min(1 + .2*(height - 1), 1.2), 1.05*height);
+};
+LatexCmds.func = Functions;
 
 //// Pesasa added \cases for E-math
 function Cases(replacedFragment) {
@@ -2726,6 +2762,12 @@ LatexCmds.complexplane = LatexCmds.Complexplane = LatexCmds.ComplexPlane =
 
 LatexCmds.H = LatexCmds.Hamiltonian = LatexCmds.quaternions = LatexCmds.Quaternions =
   bind(VanillaSymbol,'\\mathbb{H}','&#8461;');
+
+// pekasa added true and false
+LatexCmds.dollar = bind(VanillaSymbol, '\\dollar','$');
+// pekasa added true and false
+LatexCmds.T = LatexCmds.true = bind(VanillaSymbol, '\\T','T');
+LatexCmds.F = LatexCmds.false = bind(VanillaSymbol, '\\F','F');
 
 // pesasa added some working alternatives for sets of numbers as long as \\mathbb{} is broken.
 LatexCmds.NN = bind(VanillaSymbol, '\\NN','&#8469;');

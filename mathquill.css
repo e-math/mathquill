@@ -462,7 +462,10 @@
 .mathquill-rendered-math .opblock .bigoperatorstack .opto {font-size: 80%; text-align: center;}
 .mathquill-rendered-math .opblock .bigoperatorstack .opfrom .fraction,
 .mathquill-rendered-math .opblock .bigoperatorstack .opto .fraction {font-size: 70%;}
-
+/*** function ***/
+.mathquill-rendered-math .functionsblock .funcname{
+    min-width:0.5em;
+}
 
 /****** colors ***********/
 .color_red {color: #a00;}
